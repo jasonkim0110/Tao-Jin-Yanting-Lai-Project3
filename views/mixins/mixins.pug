@@ -73,6 +73,7 @@ mixin createImageUploadModal()
                     button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
                     button#imageUploadButton.btn.btn-primary(type='button') Save
 
+//- cover photo modal
 mixin createCoverPhotoUploadModal()
     #coverPhotoUploadModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='coverPhotoModalLabel', aria-hidden='true')
         .modal-dialog(role='document')
@@ -90,6 +91,7 @@ mixin createCoverPhotoUploadModal()
                     button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
                     button#coverPhotoButton.btn.btn-primary(type='button') Save
 
+//- Create the pinned post modal
 mixin createPinnedPostModal()
     #confirmPinModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmPinModalLabel', aria-hidden='true')
         .modal-dialog(role='document')

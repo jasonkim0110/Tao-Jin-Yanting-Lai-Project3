@@ -14,9 +14,11 @@ block content
         .profileHeaderContainer
             .coverPhotoSection
                 .coverPhotoContainer
+                    //- if user is on his own profile, then user can update the cover photo
                     if profileUser.coverPhoto
                         img(src=profileUser.coverPhoto, alt="User's cover photo")
 
+                    //- if user is on his own profile, then user can update the profile pic
                     if profileUser._id == userLoggedIn._id
                         button.coverPhotoButton(data-toggle="modal", data-target="#coverPhotoUploadModal")
                             i.fas.fa-camera
@@ -35,7 +37,7 @@ block content
 
                     - var profileUserId = profileUser._id.toString();
                     - if(userLoggedIn.following && userLoggedIn.following.includes(profileUserId))
-                        +createFollowButton(profileUser, true)
+                        +createFollowButton(profileUser, true) 
                     - else
                         +createFollowButton(profileUser, false)
 
