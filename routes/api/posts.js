@@ -16,6 +16,14 @@ router.get('/', async (req, res, next) => {
     delete searchObj.isReply;
   }
 
+<<<<<<< HEAD
+=======
+  if (searchObj.search !== undefined) {
+    searchObj.content = { $regex: searchObj.search, $options: 'i' };
+    delete searchObj.search;
+  }
+
+>>>>>>> Sundri
   if (searchObj.followingOnly !== undefined) {
     var followingOnly = searchObj.followingOnly == 'true';
 

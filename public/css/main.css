@@ -34,7 +34,11 @@ h1 {
 
 nav {
   display: flex;
+<<<<<<< HEAD
   flex-direction: column;
+=======
+  flex-direction: row;
+>>>>>>> Sundri
   align-items: flex-end;
   height: 100%;
 }
@@ -77,6 +81,7 @@ button span {
 
 .mainSectionContainer {
   padding: 0;
+  border-top: 1px solid var(--lightGrey);
   border-left: 1px solid var(--lightGrey);
   border-right: 1px solid var(--lightGrey);
   display: flex;
