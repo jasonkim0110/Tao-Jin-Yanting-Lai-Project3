@@ -31,7 +31,7 @@ $('#postTextarea, #replyTextarea').keyup((event) => {
   submitButton.prop('disabled', false);
 });
 
-// $('#editTextarea').keyup((event) => {
+// $('#editPostTextarea').keyup((event) => {
 //   var textbox = $(event.target);
 //   var value = textbox.val().trim();
 //   var editPostButton = $('#editPostButton');
@@ -42,6 +42,7 @@ $('#postTextarea, #replyTextarea').keyup((event) => {
 //   }
 //   editPostButton.prop('disabled', false);
 // });
+
 $('#submitPostButton, #submitReplyButton').click(() => {
   var button = $(event.target);
 
