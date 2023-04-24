@@ -1,3 +1,4 @@
+// ************************************************************************************************
 $('#imageInput').on('change', function (event) {
   var file = event.target.files[0]; // Get the selected file
 
@@ -12,7 +13,7 @@ $('#imageInput').on('change', function (event) {
   };
   reader.readAsDataURL(file); // Read the file data as a DataURL
 });
-
+// ************************************************************************************************
 $('#postTextarea, #replyTextarea').keyup((event) => {
   var textbox = $(event.target);
   var value = textbox.val().trim();
@@ -132,7 +133,7 @@ $('#editPostButton').click((event) => {
     });
   });
 });
-
+// ************************************************************************************************
 $('#editTextarea').keyup((event) => {
   var button = $(event.relatedTarget);
   var postId = getPostIdFromElement(button);
@@ -165,7 +166,7 @@ $('#editTextarea').keyup((event) => {
     },
   });
 });
-
+// ************************************************************************************************
 /*
 ------------------------------------------------------------------------------------------------
 */
