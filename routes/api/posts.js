@@ -7,6 +7,7 @@ const Post = require('../../schemas/PostSchema');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// Get returns a list of posts that match the query
 router.get('/', async (req, res, next) => {
   var searchObj = req.query;
 
@@ -53,6 +54,7 @@ router.get('/', async (req, res, next) => {
   res.status(200).send(results);
 });
 
+// GET /:id: Returns details about a specific post, including any replies to the post.
 router.get('/:id', async (req, res, next) => {
   var postId = req.params.id;
 
@@ -72,12 +74,15 @@ router.get('/:id', async (req, res, next) => {
   res.status(200).send(results);
 });
 
+// POST /: Creates a new post. Requires a content parameter in the request body.
 router.post('/', async (req, res, next) => {
+  res.status(200).send('it worked');
+  // if there is no content sent, send 400 error code
   if (!req.body.content) {
     console.log('Content param not sent with request');
     return res.sendStatus(400);
   }
-
+  // variable to store the post data
   var postData = {
     content: req.body.content,
     postedBy: req.session.user,
@@ -86,10 +91,10 @@ router.post('/', async (req, res, next) => {
   if (req.body.replyTo) {
     postData.replyTo = req.body.replyTo;
   }
-
+  // create a PostSchema and store it in the database
   Post.create(postData)
     .then(async (newPost) => {
-      newPost = await User.populate(newPost, { path: 'postedBy' });
+      newPost = await User.populate(newPost, { path: 'postedBy' }); // PostedBy carries all the user information
 
       res.status(201).send(newPost);
     })
@@ -99,6 +104,40 @@ router.post('/', async (req, res, next) => {
     });
 });
 
+// PUT /:id: Updates an existing post with new content. -- Update Post!
+router.put('/:id', async (req, res, next) => {
+  var postId = req.params.id;
+  var userId = req.session.user._id;
+
+  if (!req.body.content) {
+    console.log('Content param not sent with request');
+    return res.sendStatus(400);
+  }
+  try {
+    // Find the post by its ID and make sure the user is the one who posted it
+    var post = await Post.findOne({ _id: postId, postedBy: userId });
+
+    if (!post) {
+      return res.sendStatus(404);
+    }
+
+    // Update the post's content with the new content from the request body
+    post.content = req.body.content;
+
+    // Save the updated post to the database
+    await post.save();
+
+    // Populate the postedBy field with user data
+    post = await User.populate(post, { path: 'postedBy' });
+
+    res.status(200).send(post);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(400);
+  }
+});
+
+// PUT /:id/like: Toggles the "like" status of a post.
 router.put('/:id/like', async (req, res, next) => {
   var postId = req.params.id;
   var userId = req.session.user._id;

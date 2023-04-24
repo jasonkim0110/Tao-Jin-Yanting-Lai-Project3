@@ -41,16 +41,43 @@ mixin createDeletePostModal()
                     button.close(type='button', data-dismiss='modal', aria-label='Close')
                     span(aria-hidden='true') &times;
                 .modal-body
-                    p You won't be able to delete this.
+                    p Are you sure to delete the post?
                 .modal-footer
                     button.btn.btn-secondary(type='button', data-dismiss='modal') Close
                     button#deletePostButton.btn.btn-primary(type='button') Delete
 
+mixin createEditPostModal(userLoggedIn, postContent)
+    #editPostModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='editPostModalLabel', aria-hidden='true')
+        .modal-dialog(role='document')
+            .modal-content
+                .modal-header
+                    h5#editPostModalLabel.modal-title Edit post
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                    span(aria-hidden='true') &times;
+                .modal-body
+                    #originalPostContainer
+                    .postFormContainer
+                        .userImageContainer
+                            if userLoggedIn
+                                img(src=userLoggedIn.profilePic, alt="User's profile picture")
+                            else
+                                img(src='/images/profilePic.jpeg', alt="Default profile picture")
+                        .textareaContainer
+                            textarea#editTextarea(placeholder="What's happening?")=postContent
+                .modal-footer
+                    button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+                    button#editPostButton.btn.btn-primary(type='button', disabled ="") Save
+
+
+
+
 mixin createPostModals(userLoggedIn)
     +createReplyModal(userLoggedIn)
+    +createEditPostModal(userLoggedIn)  
     +createDeletePostModal()
     +createPinnedPostModal()
     +createUnpinPostModal()
+    
 
 mixin createFollowButton(user, isFollowing)
     - text = isFollowing ? "Following" : "Follow"

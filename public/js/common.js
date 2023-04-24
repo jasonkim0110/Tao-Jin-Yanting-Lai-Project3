@@ -1,6 +1,7 @@
 // Globals
 var cropper;
 
+// handle the user input for the text
 $('#postTextarea, #replyTextarea').keyup((event) => {
   var textbox = $(event.target);
   var value = textbox.val().trim();
@@ -19,6 +20,19 @@ $('#postTextarea, #replyTextarea').keyup((event) => {
   submitButton.prop('disabled', false);
 });
 
+$('#editTextarea').keyup((event) => {
+  var textbox = $(event.target);
+  var value = textbox.val().trim();
+  var editPostButton = $('#editPostButton');
+  if (editPostButton.length == 0) return alert('No submit button found');
+  if (value == '') {
+    editPostButton.prop('disabled', true);
+    return;
+  }
+  editPostButton.prop('disabled', false);
+});
+
+// create a new post or reply to an existing post using an AJAX request.
 $('#submitPostButton, #submitReplyButton').click(() => {
   var button = $(event.target);
 
@@ -47,6 +61,79 @@ $('#submitPostButton, #submitReplyButton').click(() => {
   });
 });
 
+// Step1: handle the user input for text - edit function ( keyup successfully )
+$('#editTextarea').keyup((event) => {
+  var textbox = $(event.target);
+  var value = textbox.val().trim();
+  var editPostButton = $('#editPostButton');
+  if (editPostButton.length == 0) return alert('No submit button found');
+  if (value == '') {
+    editPostButton.prop('disabled', true);
+    return;
+  }
+  editPostButton.prop('disabled', false);
+});
+// Step 2: Attach a click event listener to the edit post button
+$('#editPostButton').click(() => {
+  var button = $(event.target);
+  var textbox = $('editTextarea');
+
+  var data = {
+    content: textbox.val(),
+  };
+
+  var id = button.data().id;
+  if (id == null) return alert('Button id is null');
+
+  $.ajax({
+    url: `/api/posts/${postId}`,
+    type: 'PUT',
+    data: data,
+    success: function (updatedPostData) {
+      console.log('Updated post data:', updatedPostData);
+      var html = createPostHtml(updatedPostData);
+      $(`#post${postId}`).replaceWith(html);
+      $('#editPostModal').modal('hide'); // hide the edit post modal
+      // textbox.val('');
+      // button.prop('disabled', true);
+    },
+  });
+});
+
+// Step 3: Fetch the current data for the post when the edit post modal is opened
+$('#editPostModal').on('show.bs.modal', (event) => {
+  var button = $(event.relatedTarget);
+  var postId = getPostIdFromElement(button);
+
+  $.get('/api/posts/' + postId, (postData) => {
+    $('#editPostTitleInput').val(postData.title);
+    $('#editPostContentTextarea').val(postData.content);
+    $('#editPostButton').data('id', postId);
+  });
+});
+
+$('#editPostButton').click(() => {
+  var postId = $('#editPostButton').data('id');
+  var data = {
+    title: $('#editPostTitleInput').val(),
+    content: $('#editPostContentTextarea').val(),
+  };
+
+  $.ajax({
+    url: '/api/posts/' + postId,
+    type: 'PUT',
+    data: data,
+    success: (postData) => {
+      $('#editPostModal').modal('hide');
+      location.reload();
+    },
+  });
+});
+
+// replyModal to display information about the post
+// that the user is replying to, and stores the ID of that post
+// in the #submitReplyButton element so it can be included in the request
+// when the user submits the reply.
 $('#replyModal').on('show.bs.modal', (event) => {
   var button = $(event.relatedTarget);
   var postId = getPostIdFromElement(button);
@@ -225,6 +312,7 @@ $('#coverPhotoButton').click(() => {
   });
 });
 
+// update the likes
 $(document).on('click', '.likeButton', (event) => {
   var button = $(event.target);
   var postId = getPostIdFromElement(button);
@@ -246,6 +334,7 @@ $(document).on('click', '.likeButton', (event) => {
   });
 });
 
+// update the retweet
 $(document).on('click', '.retweetButton', (event) => {
   var button = $(event.target);
   var postId = getPostIdFromElement(button);
@@ -267,12 +356,13 @@ $(document).on('click', '.retweetButton', (event) => {
   });
 });
 
+// bring users to the posts page
 $(document).on('click', '.post', (event) => {
   var element = $(event.target);
   var postId = getPostIdFromElement(element);
 
   if (postId !== undefined && !element.is('button')) {
-    window.location.href = '/posts/' + postId;
+    window.location.href = '/posts/' + postId; // send user to the post page
   }
 });
 
@@ -322,6 +412,7 @@ function getPostIdFromElement(element) {
   return postId;
 }
 
+// createPost that's gonna append underneath the post content
 function createPostHtml(postData, largeFont = false) {
   if (postData == null) return alert('post object is null');
 
