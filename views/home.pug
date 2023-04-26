@@ -5,6 +5,9 @@ block content
     .postsContainer
 
     +createPostModals(userLoggedIn)
+    - if (!userLoggedIn)
+      .postsContainer
+        script(src="/js/homewithoutlogin.js")
 
 block scripts
     script(src="/js/home.js")

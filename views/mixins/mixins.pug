@@ -71,6 +71,9 @@ mixin createPostModals(userLoggedIn)
     +createUnpinPostModal()
     +createEditPostModal(userLoggedIn)
 
+mixin createRandomPostModals()
+    span 1
+
 mixin createFollowButton(user, isFollowing)
     - text = isFollowing ? "Following" : "Follow"
     - buttonClass = isFollowing ? "followButton following" : "followButton"

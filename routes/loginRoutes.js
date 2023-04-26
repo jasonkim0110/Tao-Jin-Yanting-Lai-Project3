@@ -46,4 +46,59 @@ router.post('/', async (req, res, next) => {
   res.status(200).render('login');
 });
 
+router.post('/login', async function (req, res) {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  try {
+    const createUserResponse = await UserModel.createUser({
+      username: username,
+      password: password,
+    });
+
+    const token = jwt.sign(username, password);
+
+    res.cookie('username', token);
+
+    return res.send('User created successfully');
+  } catch (e) {
+    res.status(401).send(null);
+  }
+});
+
+router.post('/create', async function (req, res) {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  const createUserResponse = await UserModel.createUser({
+    username: username,
+    password: password,
+  });
+
+  res.cookie('username', username);
+
+  return res.send('User created successfully');
+});
+
+router.get('/isLoggedIn', async function (req, res) {
+  const username = req.cookies.username;
+  const password = req.body.password;
+
+  if (!username) {
+    return res.send({ username: null });
+  }
+  let decryptedUsername;
+  try {
+    decryptedUsername = jwt.verify(username, password);
+  } catch (e) {
+    return res.send({ username: null });
+  }
+
+  if (!decryptedUsername) {
+    return res.send({ username: null });
+  } else {
+    return res.send({ username: decryptedUsername });
+  }
+});
+
 module.exports = router;
