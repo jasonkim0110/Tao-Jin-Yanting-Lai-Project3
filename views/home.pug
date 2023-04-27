@@ -2,9 +2,8 @@ extends layouts/main-layout.pug
 
 block content
     - if (!userLoggedIn)
-      .postsAllContainer
-        h2 Please login to view posts
-            script(src="/js/homewithoutlogin.js")
+        .postsAllContainer
+            h2 Please login to view posts
     - else 
         +createPostForm(userLoggedIn)
         .postsContainer
@@ -12,8 +11,9 @@ block content
         +createPostModals(userLoggedIn)
         - if (!userLoggedIn)
         .postsContainer
-            script(src="/js/home.js")
 
 block scripts
-    script(src="/js/home.js")
-    script(src="/js/homewithoutlogin.js")
+    if userLoggedIn
+        script(src="/js/home.js")
+    else
+        script(src="/js/homewithoutlogin.js")
