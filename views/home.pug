@@ -1,16 +1,16 @@
 extends layouts/main-layout.pug
 
 block content
-    .postsContainer
-        - if (!userLoggedIn)
-                h2 Please login to view posts
-        - else 
-            +createPostForm(userLoggedIn)
-            .postsContainer
+    - if (!userLoggedIn)
+        .postsAllContainer
+            h2 Please login to view posts
+    - else 
+        +createPostForm(userLoggedIn)
+        .postsContainer
 
-            +createPostModals(userLoggedIn)
-            - if (!userLoggedIn)
-            .postsContainer
+        +createPostModals(userLoggedIn)
+        - if (!userLoggedIn)
+        .postsContainer
 
 block scripts
     if userLoggedIn

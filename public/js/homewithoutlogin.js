@@ -1,7 +1,7 @@
 $(document).ready(() => {
   $.get('/api/posts', (results) => {
     console.log(results);
-    const container = $('.postsContainer');
+    const container = $('.postsAllContainer');
     outputAllPosts(results, container);
   });
 });
