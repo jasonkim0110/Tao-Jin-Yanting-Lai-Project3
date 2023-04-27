@@ -1,19 +1,18 @@
 extends layouts/main-layout.pug
 
 block content
-    - if (!userLoggedIn)
-        .postsAllContainer
-            h2 Please login to view posts
-    - else 
+    -if (!userLoggedIn)
+        .postsContainer
+        .no-posts
+            h4 You must be logged in to view this page.
+    -else
         +createPostForm(userLoggedIn)
         .postsContainer
 
         +createPostModals(userLoggedIn)
-        - if (!userLoggedIn)
-        .postsContainer
 
 block scripts
-    if userLoggedIn
-        script(src="/js/home.js")
-    else
+    -if (!userLoggedIn)
         script(src="/js/homewithoutlogin.js")
+    -else
+        script(src="/js/home.js")

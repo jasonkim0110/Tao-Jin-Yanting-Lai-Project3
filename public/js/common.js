@@ -171,23 +171,6 @@ function timeDifference(current, previous) {
     return Math.round(elapsed / msPerYear) + ' years ago';
   }
 }
-// show some random post
-async function showRandomPost() {
-  try {
-    const count = await Post.countDocuments(); // Get the number of posts in the database
-    const randomIndex = Math.floor(Math.random() * count); // Generate a random index
-    const post = await Post.findOne()
-      .skip(randomIndex)
-      .populate('postedBy likes retweetUsers retweetData replyTo');
-    if (!post) {
-      return console.error('No posts found');
-    }
-    const html = createPostHtml(post);
-    $('.postsContainer').html(html);
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 function outputPosts(results, container) {
   container.html('');
