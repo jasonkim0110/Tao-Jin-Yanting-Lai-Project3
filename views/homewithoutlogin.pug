@@ -1,0 +1,9 @@
+extends layouts/main-layout.pug
+
+block content    
+- if (!userLoggedIn)
+  .postsAllContainer
+    h1 Please login to view posts
+
+block scripts
+    script(src="/js/homewithoutlogin.js")

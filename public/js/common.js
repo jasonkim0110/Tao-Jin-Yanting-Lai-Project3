@@ -171,7 +171,7 @@ function timeDifference(current, previous) {
     return Math.round(elapsed / msPerYear) + ' years ago';
   }
 }
-// show some random post when the page loads
+// show some random post
 async function showRandomPost() {
   try {
     const count = await Post.countDocuments(); // Get the number of posts in the database

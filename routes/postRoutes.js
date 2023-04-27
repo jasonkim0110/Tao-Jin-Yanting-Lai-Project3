@@ -16,20 +16,13 @@ router.get('/:id', (req, res, next) => {
   res.status(200).render('postPage', payload);
 });
 
-router.get('/', (req, res) => {
-  var payload = {
-    pageTitle: 'Home',
-  };
-
-  if (req.session.user) {
-    res.status(200).render('home', payload);
-  } else {
-    $.get('/api/posts', (results) => {
-      const container = $('.postsContainer');
-      outputPosts(results, container);
-    });
-    payload['posts'] = [];
-    res.status(200).render('homeWithoutLogin', payload);
+router.get('/api/posts', async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ createdAt: 'desc' }).lean();
+    res.json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
   }
 });
 
