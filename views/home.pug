@@ -1,6 +1,6 @@
 extends layouts/main-layout.pug
 
-block content
+block content    
     -if (!userLoggedIn)
         .postsContainer
         .no-posts
@@ -12,7 +12,4 @@ block content
         +createPostModals(userLoggedIn)
 
 block scripts
-    -if (!userLoggedIn)
-        script(src="/js/homewithoutlogin.js")
-    -else
-        script(src="/js/home.js")
+    script(src="/js/home.js")
