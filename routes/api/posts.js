@@ -63,9 +63,6 @@ router.get('/:id', async (req, res, next) => {
     postData: postData,
   };
 
-  if (postData.replyTo === undefined) {
-    console.log('cannot find postData');
-  }
   if (postData.replyTo !== undefined) {
     results.replyTo = postData.replyTo;
   }
